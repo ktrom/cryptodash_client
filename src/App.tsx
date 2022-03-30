@@ -2,6 +2,10 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+/**
+ * Returns the application
+ * @return {HTMLDivElement} the application
+ */
 function App() {
   return (
     <div className="App">

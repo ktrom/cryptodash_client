@@ -1,0 +1,14 @@
+This project uses emotion for styling components
+https://emotion.sh/docs/introduction
+
+This project uses typescript 
+https://www.typescriptlang.org/docs/
+
+This project makes use of material-ui components
+https://mui.com/getting-started/installation/
+
+This project uses eslint
+https://eslint.org/docs/user-guide/getting-started
+
+This project uses jest testing framework
+https://jestjs.io/docs/tutorial-react
