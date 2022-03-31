@@ -5,7 +5,7 @@ module.exports = {
   },
   'extends': [
     'plugin:react/recommended',
-    'google',
+    'prettier',
   ],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {
@@ -20,5 +20,6 @@ module.exports = {
     '@typescript-eslint',
   ],
   'rules': {
+    'linebreak-style': 0,
   },
 };

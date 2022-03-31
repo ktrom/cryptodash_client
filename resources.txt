@@ -12,3 +12,8 @@ https://eslint.org/docs/user-guide/getting-started
 
 This project uses jest testing framework
 https://jestjs.io/docs/tutorial-react
+
+React Router
+https://reactrouter.com/docs/en/v6
+https://reactrouter.com/docs/en/v6/getting-started/tutorial
+
