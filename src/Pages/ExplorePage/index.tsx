@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import React from "react";
 
 /**
@@ -7,7 +8,7 @@ import React from "react";
 export default function ExplorePage() {
   return (
     <main style={{ padding: "1rem 0" }}>
-      <h2>Explore</h2>
+      <h2>{t("explore")}</h2>
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Link, Outlet } from "react-router-dom";
+import { t } from "i18next";
 
 /**
  * Returns the application
@@ -11,8 +12,8 @@ function App() {
     <div>
       <h1>Appy</h1>
       <nav>
-        <Link to="/explore">Explore</Link>
-        <Link to="/profile">Profile</Link>
+        <Link to="/explore">{t("explore")}</Link>
+        <Link to="/profile">{t("profile")}</Link>
       </nav>
       <Outlet />
     </div>
