@@ -16,6 +16,11 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { t } from "i18next";
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+  TextField,
+} from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -43,30 +48,38 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
+const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
+  //   color: "inherit",
+  //   "& .MuiAutocomplete-inputRoot": {
+  //     padding: theme.spacing(1, 1, 1, 0),
+  //     // vertical padding + font size from searchIcon
+  //     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+  //     transition: theme.transitions.create("width"),
+  //     width: "100%",
+  //     [theme.breakpoints.up("md")]: {
+  //       width: "20ch",
+  //     },
+  //   },
 }));
 
 export default function PrimarySearchAppBar() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [profileMenuAnchorEl, setProfileMenuAnchorEl] =
+    React.useState<null | HTMLElement>(null);
+  const [searchBarAnchorEl, setSearchBarAnchorEl] =
+    React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
-  const isMenuOpen = Boolean(anchorEl);
+  const isMenuOpen = Boolean(profileMenuAnchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isSearchBarOpen = Boolean(searchBarAnchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setProfileMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleSearchBarOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setSearchBarAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
@@ -74,7 +87,12 @@ export default function PrimarySearchAppBar() {
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setProfileMenuAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleSearchBarClose = () => {
+    setSearchBarAnchorEl(null);
     handleMobileMenuClose();
   };
 
@@ -85,7 +103,7 @@ export default function PrimarySearchAppBar() {
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
+      anchorEl={profileMenuAnchorEl}
       anchorOrigin={{
         vertical: "top",
         horizontal: "right",
@@ -97,6 +115,28 @@ export default function PrimarySearchAppBar() {
         horizontal: "right",
       }}
       open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>{t("profile")}</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+    </Menu>
+  );
+
+  const appBarListId = "primary-search-bar-list";
+  const appBarList = (
+    <Menu
+      anchorEl={searchBarAnchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={appBarListId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isSearchBarOpen}
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>{t("profile")}</MenuItem>
@@ -181,9 +221,32 @@ export default function PrimarySearchAppBar() {
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
+            <StyledAutocomplete
+              onClick={handleSearchBarOpen}
+              sx={(theme) => {
+                return {
+                  color: "inherit",
+                  padding: theme.spacing(1, 1, 1, 0),
+                  // vertical padding + font size from searchIcon
+                  paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                  transition: theme.transitions.create("width"),
+                  width: "100%",
+                  [theme.breakpoints.up("md")]: {
+                    width: "20ch",
+                  },
+                };
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Search..."
+                  InputProps={{
+                    ...params.InputProps,
+                    type: "search",
+                  }}
+                />
+              )}
+              options={[]}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
