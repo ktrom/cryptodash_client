@@ -16,11 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { t } from "i18next";
-import {
-  Autocomplete,
-  AutocompleteRenderInputParams,
-  TextField,
-} from "@mui/material";
+import { List } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -34,7 +30,36 @@ const Search = styled("div")(({ theme }) => ({
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
+    width: "100%",
+  },
+}));
+
+const SearchContainer = styled("div")(({ theme }) => ({
+  position: "relative",
+  // borderRadius: theme.shape.borderRadius,
+  // backgroundColor: alpha(theme.palette.common.white, 0.15),
+  // "&:hover": {
+  //   backgroundColor: alpha(theme.palette.common.white, 0.25),
+  // },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(3),
     width: "auto",
+  },
+}));
+
+const SearchListContainer = styled(Box)(({ theme }) => ({
+  background: "#fff",
+  borderRadius: theme.shape.borderRadius,
+  marginRight: theme.spacing(2),
+  position: "absolute",
+  width: "100%",
+  maxHeight: 500,
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(3),
+    width: "100%",
   },
 }));
 
@@ -48,18 +73,18 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
-  //   color: "inherit",
-  //   "& .MuiAutocomplete-inputRoot": {
-  //     padding: theme.spacing(1, 1, 1, 0),
-  //     // vertical padding + font size from searchIcon
-  //     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-  //     transition: theme.transitions.create("width"),
-  //     width: "100%",
-  //     [theme.breakpoints.up("md")]: {
-  //       width: "20ch",
-  //     },
-  //   },
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
+  },
 }));
 
 export default function PrimarySearchAppBar() {
@@ -163,7 +188,7 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={1} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
@@ -217,38 +242,19 @@ export default function PrimarySearchAppBar() {
           >
             {t("cryptodash")}
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledAutocomplete
-              onClick={handleSearchBarOpen}
-              sx={(theme) => {
-                return {
-                  color: "inherit",
-                  padding: theme.spacing(1, 1, 1, 0),
-                  // vertical padding + font size from searchIcon
-                  paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                  transition: theme.transitions.create("width"),
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "20ch",
-                  },
-                };
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Search..."
-                  InputProps={{
-                    ...params.InputProps,
-                    type: "search",
-                  }}
-                />
-              )}
-              options={[]}
-            />
-          </Search>
+          <SearchContainer>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                onClick={handleSearchBarOpen}
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+            <SearchListContainer>okurr</SearchListContainer>
+          </SearchContainer>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
