@@ -17,6 +17,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { t } from "i18next";
 import { List } from "@mui/material";
+import { COLORS } from "../../colors";
+import { Coin, getCoins, getCoinSuggestions } from "../../Util/CoinUtil";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -98,6 +100,8 @@ export default function PrimarySearchAppBar() {
   const isMenuOpen = Boolean(profileMenuAnchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isSearchBarOpen = Boolean(searchBarAnchorEl);
+  const [searchText, setSearchText] = React.useState<string>("");
+  const [coinList, setCoinList] = React.useState<Coin[]>([]);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setProfileMenuAnchorEl(event.currentTarget);
@@ -105,6 +109,18 @@ export default function PrimarySearchAppBar() {
 
   const handleSearchBarOpen = (event: React.MouseEvent<HTMLElement>) => {
     setSearchBarAnchorEl(event.currentTarget);
+  };
+
+  const handleSearchBarBlur = () => {
+    setSearchBarAnchorEl(null);
+    getCoins();
+  };
+
+  const handleSearchInputChange = async (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setSearchText(event.target.value);
+    setCoinList(await getCoinSuggestions(event.target.value));
   };
 
   const handleMobileMenuClose = () => {
@@ -223,7 +239,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar sx={{ backgroundColor: COLORS.darkblue }} position="static">
         <Toolbar>
           <IconButton
             size="large"
@@ -242,18 +258,26 @@ export default function PrimarySearchAppBar() {
           >
             {t("cryptodash")}
           </Typography>
-          <SearchContainer>
+          <SearchContainer onBlur={handleSearchBarBlur}>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
+                value={searchText}
                 onClick={handleSearchBarOpen}
+                onChange={handleSearchInputChange}
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
-            <SearchListContainer>okurr</SearchListContainer>
+            {searchBarAnchorEl && (
+              <SearchListContainer>
+                {coinList.map((coin) => (
+                  <div key={coin.uuid}>{coin.name}</div>
+                ))}
+              </SearchListContainer>
+            )}
           </SearchContainer>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
