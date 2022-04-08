@@ -18,8 +18,6 @@ export interface Coin {
     btcPrice: string
 }
 
-
-
 const getCoinsOptions = {
   method: 'GET',
   url: 'https://coinranking1.p.rapidapi.com/coins',
@@ -51,9 +49,8 @@ export function getCoins(): Promise<Coin[]> {
 const getCoinSuggestionsOptions = (query: string) => { return {
   method: 'GET',
   url: 'https://coinranking1.p.rapidapi.com/search-suggestions',
-  params: {referenceCurrencyUuid: 'yhjMzLPhuIDl'},
+  params: {'query': query, referenceCurrencyUuid: 'yhjMzLPhuIDl'},
   headers: {
-    'query': query,
     'X-RapidAPI-Host': 'coinranking1.p.rapidapi.com',
     'X-RapidAPI-Key': '4d7024c2fbmshc9a9ccf4acac0b8p17cf95jsn37a349de3a80'
   }
@@ -61,9 +58,8 @@ const getCoinSuggestionsOptions = (query: string) => { return {
 
 
 export function getCoinSuggestions(query: string): Promise<Coin[]> {
-    return axios.request(getCoinSuggestionsOptions(query)).then(function (response: Coin[]) {
-        console.log(response)
-        return response
+    return axios.request(getCoinSuggestionsOptions(query)).then(function (response: {data : {data: {coins: Coin[]}, status: string}}) {
+        return response.data.data.coins
     }).catch(function (error: any) {
         console.error(error)
     })

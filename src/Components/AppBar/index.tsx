@@ -36,6 +36,10 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
+const SearchElement = styled("div")(({ theme }) => ({
+  backgroundColor: "black",
+}));
+
 const SearchContainer = styled("div")(({ theme }) => ({
   position: "relative",
   // borderRadius: theme.shape.borderRadius,
@@ -120,7 +124,8 @@ export default function PrimarySearchAppBar() {
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setSearchText(event.target.value);
-    setCoinList(await getCoinSuggestions(event.target.value));
+    const coinlist = await getCoinSuggestions(event.target.value);
+    setCoinList(coinlist);
   };
 
   const handleMobileMenuClose = () => {
@@ -273,9 +278,13 @@ export default function PrimarySearchAppBar() {
             </Search>
             {searchBarAnchorEl && (
               <SearchListContainer>
-                {coinList.map((coin) => (
-                  <div key={coin.uuid}>{coin.name}</div>
-                ))}
+                {coinList.length > 0 ? (
+                  coinList.map((coin) => (
+                    <SearchElement key={coin.uuid}>{coin.name}</SearchElement>
+                  ))
+                ) : (
+                  <SearchElement key={"none"}>No Coins Found</SearchElement>
+                )}
               </SearchListContainer>
             )}
           </SearchContainer>
