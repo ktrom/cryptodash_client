@@ -19,6 +19,13 @@ import { t } from "i18next";
 import { Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import { COLORS } from "../../colors";
 import { Coin, getCoins, getCoinSuggestions } from "../../Util/CoinUtil";
+import { Outlet, useNavigate } from "react-router-dom";
+
+const HomeNav = styled("div")(({ theme }) => ({
+  "&:hover": {
+    cursor: "pointer",
+  },
+}));
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -118,12 +125,18 @@ export default function PrimarySearchAppBar() {
   const isSearchBarOpen = Boolean(searchBarAnchorEl);
   const [searchText, setSearchText] = React.useState<string>("");
   const [coinList, setCoinList] = React.useState<Coin[]>([]);
+  const navigate = useNavigate();
 
   const coinSecondaryText = (coin: Coin): string => {
     const dollarValue: number = parseFloat(coin.price);
     const valueAsString : string = dollarValue.toLocaleString(undefined, {maximumFractionDigits: 2});
     return dollarValue && valueAsString !== "0" ? `${valueAsString} USD` : "";
   }
+
+
+  const handleHomeNavigate = () => {
+    navigate("../home");
+  };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setProfileMenuAnchorEl(event.currentTarget);
@@ -148,9 +161,11 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(null);
   };
 
-  const handleMenuClose = () => {
+  const navigateToProfilePage = () => {
     setProfileMenuAnchorEl(null);
     handleMobileMenuClose();
+
+    navigate("../profile");
   };
 
   const handleSearchBarClose = () => {
@@ -187,10 +202,10 @@ export default function PrimarySearchAppBar() {
         horizontal: "right",
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={navigateToProfilePage}
     >
-      <MenuItem onClick={handleMenuClose}>{t("profile")}</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={navigateToProfilePage}>{t("profile")}</MenuItem>
+      <MenuItem onClick={navigateToProfilePage}>My account</MenuItem>
     </Menu>
   );
 
@@ -209,10 +224,10 @@ export default function PrimarySearchAppBar() {
         horizontal: "right",
       }}
       open={isSearchBarOpen}
-      onClose={handleMenuClose}
+      onClose={navigateToProfilePage}
     >
-      <MenuItem onClick={handleMenuClose}>{t("profile")}</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={navigateToProfilePage}>{t("profile")}</MenuItem>
+      <MenuItem onClick={navigateToProfilePage}>My account</MenuItem>
     </Menu>
   );
 
@@ -269,6 +284,7 @@ export default function PrimarySearchAppBar() {
   );
 
   return (
+    <React.Fragment>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{ backgroundColor: COLORS.darkblue }} position="static">
         <Toolbar>
@@ -281,6 +297,7 @@ export default function PrimarySearchAppBar() {
           >
             <MenuIcon />
           </IconButton>
+          <HomeNav onClick={handleHomeNavigate}>
           <Typography
             variant="h6"
             noWrap
@@ -289,6 +306,7 @@ export default function PrimarySearchAppBar() {
           >
             {t("cryptodash")}
           </Typography>
+          </HomeNav>
           <SearchContainer onBlur={handleSearchBarBlur}>
             <Search>
               <SearchIconWrapper>
@@ -378,5 +396,7 @@ export default function PrimarySearchAppBar() {
       {renderMobileMenu}
       {renderMenu}
     </Box>
+    <Outlet/>
+    </React.Fragment>
   );
 }
