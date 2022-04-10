@@ -49,7 +49,7 @@ export function getCoins(): Promise<Coin[]> {
 const getCoinSuggestionsOptions = (query: string) => { return {
   method: 'GET',
   url: 'https://coinranking1.p.rapidapi.com/search-suggestions',
-  params: {'query': query, referenceCurrencyUuid: 'yhjMzLPhuIDl'},
+  params: {'query': query,  referenceCurrencyUuid: 'yhjMzLPhuIDl'},
   headers: {
     'X-RapidAPI-Host': 'coinranking1.p.rapidapi.com',
     'X-RapidAPI-Key': '4d7024c2fbmshc9a9ccf4acac0b8p17cf95jsn37a349de3a80'

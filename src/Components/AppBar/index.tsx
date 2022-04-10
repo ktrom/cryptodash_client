@@ -16,7 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { t } from "i18next";
-import { List } from "@mui/material";
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import { COLORS } from "../../colors";
 import { Coin, getCoins, getCoinSuggestions } from "../../Util/CoinUtil";
 
@@ -36,8 +36,8 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
-const SearchElement = styled("div")(({ theme }) => ({
-  backgroundColor: "black",
+const StyledListItemText = styled(ListItemText)(({ color }) => ({
+  color: color || "black",
 }));
 
 const SearchContainer = styled("div")(({ theme }) => ({
@@ -107,6 +107,12 @@ export default function PrimarySearchAppBar() {
   const [searchText, setSearchText] = React.useState<string>("");
   const [coinList, setCoinList] = React.useState<Coin[]>([]);
 
+  const coinSecondaryText = (coin: Coin): string => {
+    const dollarValue: number = parseFloat(coin.price);
+    const valueAsString : string = dollarValue.toLocaleString(undefined, {maximumFractionDigits: 2});
+    return dollarValue && valueAsString !== "0" ? `${valueAsString} USD` : "";
+  }
+
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setProfileMenuAnchorEl(event.currentTarget);
   };
@@ -124,8 +130,6 @@ export default function PrimarySearchAppBar() {
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setSearchText(event.target.value);
-    const coinlist = await getCoinSuggestions(event.target.value);
-    setCoinList(coinlist);
   };
 
   const handleMobileMenuClose = () => {
@@ -145,6 +149,16 @@ export default function PrimarySearchAppBar() {
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  React.useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      const coinlist = await getCoinSuggestions(searchText);
+      setCoinList(coinlist);
+    }, 200)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchText])
+
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -279,11 +293,26 @@ export default function PrimarySearchAppBar() {
             {searchBarAnchorEl && (
               <SearchListContainer>
                 {coinList.length > 0 ? (
-                  coinList.map((coin) => (
-                    <SearchElement key={coin.uuid}>{coin.name}</SearchElement>
-                  ))
+                  <List dense={false}>
+                  {coinList.map((coin) => 
+                    <ListItem key={coin.uuid}>
+                      <ListItemAvatar>
+                        <Avatar src={coin.iconUrl}/>
+                      </ListItemAvatar>
+                      <StyledListItemText
+                        color={coin.color}
+                        primary={coin.name}
+                        secondary={coinSecondaryText(coin)}
+                      />
+                    </ListItem>,
+                  )}
+                </List>
                 ) : (
-                  <SearchElement key={"none"}>No Coins Found</SearchElement>
+                  <ListItem key={"None"}>
+                      <StyledListItemText
+                        primary={"No Coins Found"}
+                      />
+                    </ListItem>
                 )}
               </SearchListContainer>
             )}
