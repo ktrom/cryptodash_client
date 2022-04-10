@@ -40,6 +40,14 @@ const StyledListItemText = styled(ListItemText)(({ color }) => ({
   color: color || "black",
 }));
 
+const StyledListItem = styled(ListItem)(( {theme} ) => ({
+  borderRadius: theme.shape.borderRadius,
+  "&:hover": {
+    cursor: "pointer",
+    backgroundColor: "lightgrey",
+  },
+}));
+
 const SearchContainer = styled("div")(({ theme }) => ({
   position: "relative",
   // borderRadius: theme.shape.borderRadius,
@@ -62,11 +70,15 @@ const SearchListContainer = styled(Box)(({ theme }) => ({
   marginRight: theme.spacing(2),
   position: "absolute",
   width: "100%",
-  maxHeight: 500,
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
     width: "100%",
   },
+}));
+
+const StyledList= styled(List)(({ theme }) => ({
+  maxHeight: 300,
+  overflow: "auto",
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -154,7 +166,7 @@ export default function PrimarySearchAppBar() {
     const delayDebounceFn = setTimeout(async () => {
       const coinlist = await getCoinSuggestions(searchText);
       setCoinList(coinlist);
-    }, 200)
+    }, 300)
 
     return () => clearTimeout(delayDebounceFn)
   }, [searchText])
@@ -290,12 +302,12 @@ export default function PrimarySearchAppBar() {
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
-            {searchBarAnchorEl && (
+            {searchBarAnchorEl &&  (
               <SearchListContainer>
                 {coinList.length > 0 ? (
-                  <List dense={false}>
+                  <StyledList dense={false}>
                   {coinList.map((coin) => 
-                    <ListItem key={coin.uuid}>
+                    <StyledListItem key={coin.uuid}>
                       <ListItemAvatar>
                         <Avatar src={coin.iconUrl}/>
                       </ListItemAvatar>
@@ -304,9 +316,9 @@ export default function PrimarySearchAppBar() {
                         primary={coin.name}
                         secondary={coinSecondaryText(coin)}
                       />
-                    </ListItem>,
+                    </StyledListItem>,
                   )}
-                </List>
+                </StyledList>
                 ) : (
                   <ListItem key={"None"}>
                       <StyledListItemText
