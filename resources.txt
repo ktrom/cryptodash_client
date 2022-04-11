@@ -25,3 +25,6 @@ https://coolors.co/palette/7400b8-6930c3-5e60ce-5390d9-4ea8de-48bfe3-56cfe1-64df
 
 CoinRanking API
 https://rapidapi.com/Coinranking/api/coinranking1/
+
+This app uses Redux for application state management
+https://redux.js.org/introduction/getting-started
