@@ -10,8 +10,11 @@ import "./i18next/i18n";
 import { t } from "i18next";
 import AppBar from "./Components/AppBar";
 import HomePage from "./Pages/HomePage";
+import { Provider } from "react-redux";
+import { store } from './redux/store';
 
 ReactDOM.render(
+  <Provider store = {store}>
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<AppBar />}>
@@ -21,7 +24,8 @@ ReactDOM.render(
       </Route>
       <Route path="*" element={<PageNotFoundPage />} />
     </Routes>
-  </BrowserRouter>,
+  </BrowserRouter>
+  /</Provider>,
   document.getElementById("root")
 );
 
