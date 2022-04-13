@@ -28,3 +28,6 @@ https://rapidapi.com/Coinranking/api/coinranking1/
 
 This app uses Redux for application state management
 https://redux.js.org/introduction/getting-started
+
+Extra axios libraries and loading bar!
+https://blog.logrocket.com/how-to-make-http-requests-like-a-pro-with-axios/
